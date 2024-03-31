@@ -67,3 +67,25 @@ resource "kubernetes_deployment" "nodejsapp_k8_deployment" {
     }
   }
 }
+
+resource "kubernetes_service" "nodeapp_load_balancer" {
+  metadata {
+    name = "nodeapp-load-balancer"
+    labels = {
+      app = "nodeapp"
+    }
+  }
+  
+  spec {
+    selector = {
+      app = "nodejsapp"
+    }
+    
+    port {
+      port        = 3000
+      target_port = 3000
+    }
+    
+    type = "LoadBalancer"
+  }
+}
