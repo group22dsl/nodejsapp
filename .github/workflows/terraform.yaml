@@ -1,9 +1,9 @@
-name: Apply Terraform on Merge to Main
+name: Apply Terraform on Merge to master
 
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   terraform:
@@ -25,6 +25,6 @@ jobs:
         run: terraform plan -out=tfplan terraform/config
 
       - name: Terraform apply
-        if: github.ref == 'refs/heads/main' # Run apply only for main branch
+        if: github.ref == 'refs/heads/master' # Run apply only for master branch
         run: terraform apply tfplan
         # You might want to add additional options here such as auto-approving the apply with `-auto-approve` flag
