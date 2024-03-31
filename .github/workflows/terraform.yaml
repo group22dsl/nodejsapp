@@ -16,13 +16,16 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: <terraform-version> # Specify your Terraform version here
+          terraform_version: ">= 1.2.0" # Specify your Terraform version here
+      
+      - name: Go to terraform folder
+        run: cd terraform/config
 
       - name: Terraform init
-        run: terraform init terraform/config
+        run: terraform init
 
       - name: Terraform plan
-        run: terraform plan -out=tfplan terraform/config
+        run: terraform plan -out=tfplan
 
       - name: Terraform apply
         if: github.ref == 'refs/heads/master' # Run apply only for master branch
