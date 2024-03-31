@@ -1,6 +1,6 @@
 # Configure the Google Cloud provider
 provider "google" {
-  credentials = file("../../forward-entity-402409-747e61cc783b.json")
+  credentials = var.GOOGLE_CRENTIALS
   project     = "forward-entity-402409"
   region      = "europe-west1"
 }
