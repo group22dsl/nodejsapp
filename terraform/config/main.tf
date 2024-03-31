@@ -1,8 +1,3 @@
-variable "secret_variable" {
-  description = "Secret variable"
-  type        = string
-}
-
 # Configure the Google Cloud provider
 provider "google" {
   credentials = var.secret_variable

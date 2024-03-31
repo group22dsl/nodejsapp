@@ -26,7 +26,7 @@ jobs:
 
       - name: Terraform plan
         working-directory: terraform/config
-        run: terraform plan
+        run: terraform plan -var "secret_variable=${{ secrets.GOOGLE_CRENTIALS }}"
 
       - name: Terraform apply
         working-directory: terraform/config
