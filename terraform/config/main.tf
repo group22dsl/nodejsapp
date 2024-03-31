@@ -5,6 +5,12 @@ provider "google" {
   region      = "europe-west1"
 }
 
+# Define the Kubernetes provider
+provider "kubernetes" {
+  config_path    = "~/.kube/config"  # Path to your kubeconfig file
+  version        = "~> 2.0"          # Version constraint for the provider
+}
+
 # Define the Google kubernates engine cluster
 resource "google_container_cluster" "my_cluster" {
     name = "google-cloud-cluster"
