@@ -24,11 +24,8 @@ jobs:
         working-directory: terraform/config
         run: terraform init
 
-      - name: Set Google Credentials as Environment Variable
-        run: echo "::set-env name=GOOGLE_CREDENTIALS::${{ secrets.GOOGLE_CRENTIALS }}"
-
       - name: Terraform Plan
-        run: terraform plan -var "secret_variable=${{ env.GOOGLE_CREDENTIALS }}"
+        run: terraform plan -var "secret_variable=${{ env.GOOGLE_CRENTIALS }}"
 
       # - name: Terraform plan
       #   working-directory: terraform/config
