@@ -6,14 +6,14 @@ provider "google" {
 }
 
 # Configure the Google Cloud provider (assuming credentials are set elsewhere)
-# provider "google" {
-#   project = "forward-entity-402409"
-#   region  = "europe-west1"
-# }
+provider "google" {
+  project = "forward-entity-402409"
+  region  = "europe-west1"
+}
 
 # Define the Kubernetes provider (assuming kubeconfig is accessible)
 provider "kubernetes" {
-  host = "https:35.233.26.59"  # Replace with your GKE cluster endpoint
+  host = "https://35.233.26.59"  # Replace with your GKE cluster endpoint
 }
 
 # Define the Kubernetes deployment
