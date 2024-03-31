@@ -60,7 +60,7 @@ resource "kubernetes_deployment" "nodeapp_deployment" {
 # Define the Kubernetes service (LoadBalancer type)
 resource "kubernetes_service" "nodeapp_load_balancer" {
   metadata {
-    name = "nodeapp-load-balancer_1"
+    name = "nodeapp-load-balancer-1"
     labels = {
       type = "backend"
       app  = "nodeapp"
