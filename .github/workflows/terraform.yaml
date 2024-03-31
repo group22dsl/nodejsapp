@@ -1,0 +1,30 @@
+name: Apply Terraform on Merge to Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: <terraform-version> # Specify your Terraform version here
+
+      - name: Terraform init
+        run: terraform init terraform/config
+
+      - name: Terraform plan
+        run: terraform plan -out=tfplan terraform/config
+
+      - name: Terraform apply
+        if: github.ref == 'refs/heads/main' # Run apply only for main branch
+        run: terraform apply tfplan
+        # You might want to add additional options here such as auto-approving the apply with `-auto-approve` flag
