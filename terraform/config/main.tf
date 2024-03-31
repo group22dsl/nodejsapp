@@ -1,6 +1,11 @@
+variable "secret_variable" {
+  description = "Secret variable"
+  type        = string
+}
+
 # Configure the Google Cloud provider
 provider "google" {
-  credentials = var.GOOGLE_CRENTIALS
+  credentials = var.secret_variable
   project     = "forward-entity-402409"
   region      = "europe-west1"
 }
