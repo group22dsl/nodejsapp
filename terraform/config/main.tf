@@ -1,6 +1,6 @@
 # Configure the Google Cloud provider
 provider "google" {
-  credentials = var.secret_variable
+  credentials = var.my_var_from_github
   project     = "forward-entity-402409"
   region      = "europe-west1"
 }

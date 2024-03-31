@@ -9,7 +9,7 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     env:
-      GOOGLE_CRENTIALS: ${{ secrets.GOOGLE_CRENTIALS }}
+      TF_VAR_my_var_from_github: ${{ secrets.GOOGLE_CRENTIALS }}
 
     steps:
       - name: Checkout repository
@@ -25,7 +25,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan -var "secret_variable=${{ env.GOOGLE_CRENTIALS }}"
+        run: terraform plan
 
       # - name: Terraform plan
       #   working-directory: terraform/config
@@ -34,5 +34,5 @@ jobs:
       - name: Terraform apply
         working-directory: terraform/config
         if: github.ref == 'refs/heads/master' # Run apply only for master branch
-        run: terraform apply -auto-approve -var "secret_variable=${{ secrets.GOOGLE_CRENTIALS }}"
+        run: terraform apply -auto-approve
         # You might want to add additional options here such as auto-approving the apply with `-auto-approve` flag

@@ -1,4 +1,1 @@
-variable "secret_variable" {
-  description = "Secret variable"
-  type        = string
-}
+variable "my_var_from_github" {}
