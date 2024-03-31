@@ -6,10 +6,10 @@ provider "google" {
 }
 
 # Configure the Google Cloud provider (assuming credentials are set elsewhere)
-provider "google" {
-  project = "forward-entity-402409"
-  region  = "europe-west1"
-}
+# provider "google" {
+#   project = "forward-entity-402409"
+#   region  = "europe-west1"
+# }
 
 # Define the Kubernetes provider (assuming kubeconfig is accessible)
 provider "kubernetes" {
