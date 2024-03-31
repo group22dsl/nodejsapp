@@ -1,6 +1,6 @@
 # Configure the Google Cloud provider
 provider "google" {
-  credentials = "${secrets.GOOGLE_CRENTIALS}"
+  credentials = "${{ secrets.GOOGLE_CRENTIALS }}"
   project     = "forward-entity-402409"
   region      = "europe-west1"
 }
