@@ -13,7 +13,7 @@ provider "kubernetes" {
 
 # Define the Google kubernates engine cluster
 resource "google_container_cluster" "my_cluster" {
-    name = "google-cloud-cluster"
+    name = "google-cloud-cluster-1"
     location = "europe-west1"
     initial_node_count = 1
 
