@@ -20,6 +20,7 @@ resource "google_container_cluster" "my_cluster" {
       disabled = false
     }
   }
+}
 # resource "google_container_cluster" "google-cloud-cluster-2" {
 #     name = "google-cloud-cluster-2"
 #     location = "europe-west1"
