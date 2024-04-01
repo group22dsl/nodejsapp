@@ -29,42 +29,42 @@ provider "google" {
 
 #   remove_default_node_pool = true
 # }
-# resource "google_container_cluster" "google-cloud-cluster-2" {
-#     name = "google-cloud-cluster-2"
-#     location = "europe-west1"
-#     initial_node_count = 1
+resource "google_container_cluster" "my-gke-cluster-new" {
+    name = "my-gke-cluster-new"
+    location = "europe-west1"
+    initial_node_count = 1
 
-#     addons_config {
-#         http_load_balancing {
-#             disabled = false
-#         }
-#         horizontal_pod_autoscaling {
-#             disabled = false
-#         }
-#     }
+    addons_config {
+        http_load_balancing {
+            disabled = false
+        }
+        horizontal_pod_autoscaling {
+            disabled = false
+        }
+    }
 
-#     maintenance_policy {
-#         daily_maintenance_window {
-#             start_time = "03:00"
-#         }
-#     }
+    maintenance_policy {
+        daily_maintenance_window {
+            start_time = "03:00"
+        }
+    }
 
-#     remove_default_node_pool = true
-# }
+    remove_default_node_pool = true
+}
 
 # Fetch information about the GKE cluster
 data "google_client_config" "provider" {}
 
-data "google_container_cluster" "my-gke-cluster" {
-  name     = "my-gke-cluster"
+data "google_container_cluster" "my-gke-cluster-new" {
+  name     = "my-gke-cluster-new"
   location = "europe-west1"
 }
 
 provider "kubernetes" {
-  host  = "https://${data.google_container_cluster.my-gke-cluster.endpoint}"
+  host  = "https://${data.google_container_cluster.my-gke-cluster-new.endpoint}"
   token = data.google_client_config.provider.access_token
   cluster_ca_certificate = base64decode(
-    data.google_container_cluster.my-gke-cluster.master_auth[0].cluster_ca_certificate,
+    data.google_container_cluster.my-gke-cluster-new.master_auth[0].cluster_ca_certificate,
   )
 }
 
