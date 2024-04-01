@@ -29,28 +29,28 @@ provider "google" {
 
 #   remove_default_node_pool = true
 # }
-resource "google_container_cluster" "my-gke-cluster-new" {
-    name = "my-gke-cluster-new"
-    location = "europe-west1"
-    initial_node_count = 1
+# resource "google_container_cluster" "my-gke-cluster-new" {
+#     name = "my-gke-cluster-new"
+#     location = "europe-west1"
+#     initial_node_count = 1
 
-    addons_config {
-        http_load_balancing {
-            disabled = false
-        }
-        horizontal_pod_autoscaling {
-            disabled = false
-        }
-    }
+#     addons_config {
+#         http_load_balancing {
+#             disabled = false
+#         }
+#         horizontal_pod_autoscaling {
+#             disabled = false
+#         }
+#     }
 
-    maintenance_policy {
-        daily_maintenance_window {
-            start_time = "03:00"
-        }
-    }
+#     maintenance_policy {
+#         daily_maintenance_window {
+#             start_time = "03:00"
+#         }
+#     }
 
-    remove_default_node_pool = true
-}
+#     remove_default_node_pool = true
+# }
 
 # Fetch information about the GKE cluster
 data "google_client_config" "provider" {}
@@ -117,9 +117,9 @@ resource "kubernetes_deployment" "nodejsapp_k8_deployment" {
   }
 }
 
-resource "kubernetes_service" "nodeapp_load_balancer" {
+resource "kubernetes_service" "nodeapp_load_balancer-new" {
   metadata {
-    name = "nodeapp-load-balancer"
+    name = "nodeapp-load-balancer-new"
     labels = {
       app = "nodeapp"
     }
