@@ -5,24 +5,46 @@ provider "google" {
   region      = "europe-west1"
 }
 
-# Configure the Google Cloud provider (assuming credentials are set elsewhere)
-# provider "google" {
-#   project = "forward-entity-402409"
-#   region  = "europe-west1"
-# }
+# Define the Google kubernates engine cluster
+resource "google_container_cluster" "my_cluster" {
+    name = "google-cloud-cluster-2"
+    location = "europe-west1"
+    initial_node_count = 1
 
-# Define the Kubernetes provider (assuming kubeconfig is accessible)
-provider "kubernetes" {
-  host = "https://35.233.26.59"  # Replace with your GKE cluster endpoint
+    addons_config {
+        http_load_balancing {
+            disabled = false
+        }
+        horizontal_pod_autoscaling {
+            disabled = false
+        }
+    }
+
+    maintenance_policy {
+        daily_maintenance_window {
+            start_time = "03:00"
+        }
+    }
+
+    remove_default_node_pool = true
 }
 
-# Define the Kubernetes deployment
-resource "kubernetes_deployment" "nodeapp_deployment" {
+# Define the Kubernetes provider
+provider "kubernetes" {
+  host  = "https://${data.google_container_cluster.google-cloud-cluster-2.endpoint}"
+  token = data.google_client_config.provider.access_token
+  cluster_ca_certificate = base64decode(
+    data.google_container_cluster.google-cloud-cluster-2.master_auth[0].cluster_ca_certificate,
+  )
+}
+
+# Define the Kubenetes deployment for the node.js application
+
+resource "kubernetes_deployment" "nodejsapp_k8_deployment" {
   metadata {
-    name = "myappdeployment"
+    name = "terraform-to-k8-deployment"
     labels = {
-      type = "backend"
-      app  = "nodeapp"
+      app = "nodejsapp"
     }
   }
 
@@ -31,25 +53,23 @@ resource "kubernetes_deployment" "nodeapp_deployment" {
 
     selector {
       match_labels = {
-        type = "backend"
-        app  = "nodeapp"
+        app = "nodejsapp"
       }
     }
 
     template {
       metadata {
         labels = {
-          type = "backend"
-          app  = "nodeapp"
+          app = "nodejsapp"
         }
       }
 
       spec {
         container {
-          image = "eu.gcr.io/forward-entity-402409/nodeapp:v3"
-          name  = "nodeappcontainer"
+          image = "eu.gcr.io/forward-entity-402409/nodejsapp:v2"
+          name  = "nodejsapp-container"
           port {
-            container_port = 3000
+              container_port = 3000
           }
         }
       }
@@ -57,119 +77,24 @@ resource "kubernetes_deployment" "nodeapp_deployment" {
   }
 }
 
-# Define the Kubernetes service (LoadBalancer type)
 resource "kubernetes_service" "nodeapp_load_balancer" {
   metadata {
-    name = "nodeapp-load-balancer-1"
+    name = "nodeapp-load-balancer"
     labels = {
-      type = "backend"
-      app  = "nodeapp"
+      app = "nodeapp"
     }
   }
-
+  
   spec {
     selector = {
-      type = "backend"
-      app  = "nodeapp"
+      app = "nodejsapp"
     }
-
+    
     port {
       port        = 3000
       target_port = 3000
     }
-
+    
     type = "LoadBalancer"
   }
 }
-
-
-# # Define the Kubernetes provider
-# provider "kubernetes" {
-#   config_path    = "~/.kube/config"  # Path to your kubeconfig file
-#   version        = "~> 2.0"          # Version constraint for the provider
-# }
-
-# # Define the Google kubernates engine cluster
-# resource "google_container_cluster" "my_cluster" {
-#     name = "google-cloud-cluster-1"
-#     location = "europe-west1"
-#     initial_node_count = 1
-
-#     addons_config {
-#         http_load_balancing {
-#             disabled = false
-#         }
-#         horizontal_pod_autoscaling {
-#             disabled = false
-#         }
-#     }
-
-#     maintenance_policy {
-#         daily_maintenance_window {
-#             start_time = "03:00"
-#         }
-#     }
-
-#     remove_default_node_pool = true
-# }
-
-# # Define the Kubenetes deployment for the node.js application
-
-# resource "kubernetes_deployment" "nodejsapp_k8_deployment" {
-#   metadata {
-#     name = "terraform-to-k8-deployment"
-#     labels = {
-#       app = "nodejsapp"
-#     }
-#   }
-
-#   spec {
-#     replicas = 2
-
-#     selector {
-#       match_labels = {
-#         app = "nodejsapp"
-#       }
-#     }
-
-#     template {
-#       metadata {
-#         labels = {
-#           app = "nodejsapp"
-#         }
-#       }
-
-#       spec {
-#         container {
-#           image = "eu.gcr.io/forward-entity-402409/nodejsapp:v2"
-#           name  = "nodejsapp-container"
-#           port {
-#               container_port = 3000
-#           }
-#         }
-#       }
-#     }
-#   }
-# }
-
-# resource "kubernetes_service" "nodeapp_load_balancer" {
-#   metadata {
-#     name = "nodeapp-load-balancer"
-#     labels = {
-#       app = "nodeapp"
-#     }
-#   }
-  
-#   spec {
-#     selector = {
-#       app = "nodejsapp"
-#     }
-    
-#     port {
-#       port        = 3000
-#       target_port = 3000
-#     }
-    
-#     type = "LoadBalancer"
-#   }
-# }
