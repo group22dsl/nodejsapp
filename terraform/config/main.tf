@@ -9,7 +9,7 @@ provider "google" {
 resource "google_container_cluster" "my_cluster" {
   name               = "my-gke-cluster"
   location           = "europe-west1"
-  initial_node_count = 3
+  initial_node_count = 1
 
   # Optional: Add-ons configuration
   addons_config {
@@ -20,6 +20,14 @@ resource "google_container_cluster" "my_cluster" {
       disabled = false
     }
   }
+
+  maintenance_policy {
+    daily_maintenance_window {
+      start_time = "03:00"
+    }
+  }
+
+  remove_default_node_pool = true
 }
 # resource "google_container_cluster" "google-cloud-cluster-2" {
 #     name = "google-cloud-cluster-2"
